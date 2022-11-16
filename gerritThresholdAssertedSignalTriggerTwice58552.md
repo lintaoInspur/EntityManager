@@ -99,6 +99,7 @@ and the secondary creation of the Dbus sensors when the synchronization threshol
 
 My personal approach is remove the emits-change in FLAGS of Threshold Value
 Before:
+```
 root@NULL:~# busctl  introspect  xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/Inlet_Temp
 NAME                                                 TYPE      SIGNATURE RESULT/VALUE         FLAGS
 ...
@@ -109,7 +110,7 @@ xyz.openbmc_project.Configuration.TMP112.Thresholds1 interface -         -      
 .Severity                                            property  d         0                    emits-change writable
 .Value                                               property  d         42                   emits-change writable
 root@NULL:~#
-
+```
 After this modification:
 ```
 root@NULL:~# busctl  introspect  xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/Inlet_Temp
