@@ -99,7 +99,7 @@ and the secondary creation of the Dbus sensors when the synchronization threshol
 
 My personal approach is remove the emits-change in FLAGS of Threshold Value
 Before:
-```
+```shell
 root@NULL:~# busctl  introspect  xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/Inlet_Temp
 NAME                                                 TYPE      SIGNATURE RESULT/VALUE         FLAGS
 ...
@@ -131,7 +131,7 @@ Code process：
 getService:
 https://github.com/openbmc/phosphor-host-ipmid/blob/master/sensorhandler.cpp#L876
 
-```
+```shell
 root@NULL:~# busctl call  --verbose   xyz.openbmc_project.ObjectMapper /xyz/openbmc_project/object_mapper  xyz.openbmc_project.ObjectMapper GetObject   sas  /xyz/openbmc_project/sensors/temperature/Inlet_Temp 3 xyz.openbmc_project.Sensor.Value  xyz.openbmc_project.Sensor.Threshold.Warning xyz.openbmc_project.Sensor.Threshold.Critical
 MESSAGE "a{sas}" {
         ARRAY "{sas}" {
@@ -154,7 +154,7 @@ MESSAGE "a{sas}" {
 ~### Step 2: ipmi cmd
 getAllDbusProperties:
 https://github.com/openbmc/phosphor-host-ipmid/blob/master/sensorhandler.cpp#L893
-```
+```shell
 root@NULL:~# busctl  call --verbose xyz.openbmc_project.HwmonTempSensor /xyz/openbmc_project/sensors/temperature/Inlet_Temp org.freedesktop.DBus.Properties GetAll s xyz.openbmc_project.Sensor.Threshold.Warning
 MESSAGE "a{sv}" {
         ARRAY "{sv}" {
@@ -186,7 +186,7 @@ root@NULL:~# busctl set-property   xyz.openbmc_project.HwmonTempSensor /xyz/open
 ~### Step 4: dbus-sensors
 async_method_call:Set ,async to EmtityManager
 https://github.com/openbmc/dbus-sensors/blob/master/src/Thresholds.cpp#L183
-```
+```shell
 root@NULL:~# busctl set-property xyz.openbmc_project.EntityManager  /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/SYS_5V  xyz.openbmc_project.Configuration.ADC.Thresholds0   Value  d  7.000
 root@NULL:~#
 
@@ -262,6 +262,7 @@ The sensor updateValue will do that signal_send("ThresholdAsserted")
 So we have ThresholdAsserted twice.
 
 The Property:
+```shell
 root@NULL:~# busctl  introspect  xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/Inlet_Temp
 NAME                                                 TYPE      SIGNATURE RESULT/VALUE         FLAGS
 org.freedesktop.DBus.Introspectable                  interface -         -                    -
@@ -292,9 +293,9 @@ xyz.openbmc_project.Configuration.TMP112.Thresholds1 interface -         -      
 .Severity                                            property  d         0                    emits-change writable
 .Value                                               property  d         42                   emits-change writable
 root@NULL:~#
-
-After this modification: Value FLAGS: only writable
 ```
+After this modification: Value FLAGS: only writable
+```shell
 root@NULL:~# busctl  introspect  xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/board/FP5280G2_Motherboard/Inlet_Temp
 NAME                                                 TYPE      SIGNATURE RESULT/VALUE         FLAGS
 org.freedesktop.DBus.Introspectable                  interface -         -                    -
